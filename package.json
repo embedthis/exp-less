@@ -1,0 +1,10 @@
+{
+    "name": "exp-less",
+    "description": "Less Plugin for Expansive",
+    "version": "0.1.0",
+    "keywords": [
+        "expansive-plugin",
+        "less"
+    ],
+    "licenses": "GPL",
+}
