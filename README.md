@@ -1,15 +1,15 @@
-exp-less
+exp-lessc
 ===
 
 Expansive plugin for Less files.
 
-Provides the 'compile-less' service.
+Provides the the lessc program.
 
-Note this does not provide a Less compiler itself. See exp-recess.
+Use exp-less for the less => css service.
 
 ### To install:
 
-exp install exp-less
+exp install exp-lessc
 
 ### Get Pak from
 
