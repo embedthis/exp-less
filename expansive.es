@@ -7,8 +7,8 @@ Expansive.load({
     expansive: {
         transforms: {
             name:   'compile-less',
-            from:   'less',
-            to:     'css',
+            input:  'less',
+            output: 'css',
             script: `
                 function transform(contents, meta, service) {
                     let less = Cmd.locate('lessc')
