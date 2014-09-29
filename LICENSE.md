@@ -1,4 +1,4 @@
-exp-less License
+exp-lessc License
 ===
 
 [MIT](http://opensource.org/licenses/MIT)

@@ -1,5 +1,5 @@
 /*
-    expansive.es - Configuration for exp-less
+    expansive.es - Configuration for exp-lessc
 
     Transform by less into css. Uses lessc|recess.
  */
