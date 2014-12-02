@@ -9,7 +9,7 @@ Use exp-less for the less => css service.
 
 ### To install:
 
-exp install exp-lessc
+exp install lessc
 
 ### Get Pak from
 
