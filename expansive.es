@@ -1,36 +1,76 @@
 /*
-    expansive.es - Configuration for exp-lessc
+    expansive.es - Configuration for exp-less
 
     Transform by less into css. Uses lessc|recess.
  */
 Expansive.load({
-    expansive: {
-        transforms: {
-            name:   'compile-less',
-            input:  'less',
-            output: 'css',
-            script: `
-                function transform(contents, meta, service) {
-                    let less = Cmd.locate('lessc')
-                    if (less) {
-                        contents = Cmd.run(less + ' - ', {dir: meta.file.dirname}, contents)
-                    } else {
-                        let recess = Cmd.locate('recess')
-                        if (recess) {
-                            let results = runFile(recess + ' -compile', contents, meta)
-                            if (results == '') {
-                                /* Failed, run again to get diagnostics - Ugh! */
-                                let errors = runFile(recess, contents, meta)
-                                throw 'Failed to parse less sheet ' + meta.file + '\n' + errors + '\n'
-                            }
-                            contents = results
-                        } else {
-                            trace('Warn', 'Cannot find lessc or recess')
-                        }
+    transforms: [{
+        name:   'compile-less-css',
+        input:  'less',
+        output: 'css',
+        stylesheet: null,
+        dependencies: null,
+        documents: [ '!**.less', '**.css.less' ],
+        script: `
+            let service = expansive.services['compile-less-css']
+            if (service.enable) {
+                let control = expansive.control
+                if (service.stylesheet) {
+                    if (control.render.css == null) {
+                        control.render.css = false
                     }
-                    return contents
+                    if (!service.dependencies) {
+                        service.dependencies ||= {}
+                        service.dependencies[service.stylesheet + '.less'] = '**.less'
+                    }
                 }
-            `
-        }
-    }
+                blend(control.dependencies, service.dependencies)
+                control.documents += service.documents
+            }
+
+            function transform(contents, meta, service) {
+                let less = Cmd.locate('lessc')
+                if (less) {
+                    contents = Cmd.run(less + ' - ', {dir: meta.file.dirname}, contents)
+                } else {
+                    /*
+                        Can also use recess if lessc not installed
+                     */
+                    let recess = Cmd.locate('recess')
+                    if (recess) {
+                        let results = runFile(recess + ' -compile', contents, meta)
+                        if (results == '') {
+                            /* Failed, run again to get diagnostics - Ugh! */
+                            let errors = runFile(recess, contents, meta)
+                            throw 'Failed to parse less sheet ' + meta.file + '\n' + errors + '\n'
+                        }
+                        contents = results
+                    } else {
+                        trace('Warn', 'Cannot find lessc or recess')
+                    }
+                }
+                return contents
+            }
+        `
+    }, {
+        /*
+            Abort processing unwanted css files
+            Uses configuration from compile-less-css (stylesheet)
+         */
+        name:   'clean-css',
+        input:  'css',
+        output: 'css',
+        enable: false,
+        script: `
+            function transform(contents, meta, service) {
+                let lservice = expansive.services['compile-less-css']
+                if (lservice.stylesheet) {
+                    if (lservice.stylesheet != meta.dest) {
+                        contents = null
+                    }
+                }
+                return contents
+            }
+        `
+    }]
 })
