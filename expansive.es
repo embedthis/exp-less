@@ -31,7 +31,7 @@ Expansive.load({
             function transform(contents, meta, service) {
                 let less = Cmd.locate('lessc')
                 if (less) {
-                    contents = Cmd.run(less + ' - ', {dir: meta.file.dirname}, contents)
+                    contents = Cmd.run(less + ' - ', {dir: meta.source.dirname}, contents)
                 } else {
                     /*
                         Can also use recess if lessc not installed
@@ -42,7 +42,7 @@ Expansive.load({
                         if (results == '') {
                             /* Failed, run again to get diagnostics - Ugh! */
                             let errors = runFile(recess, contents, meta)
-                            throw 'Failed to parse less sheet ' + meta.file + '\n' + errors + '\n'
+                            throw 'Failed to parse less sheet ' + meta.source + '\n' + errors + '\n'
                         }
                         contents = results
                     } else {
