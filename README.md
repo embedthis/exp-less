@@ -26,11 +26,11 @@ process any '\*.css.less' files and exclude the simple '\*.less' files.
 
 ### To configure in expansive.json:
 
-* compile-less-css.enable -- Enable the compile-less-css service to process less files.
-* compile-less-css.stylesheet -- Primary stylesheet to update if any less file changes.
+* compile-less-css.enable &mdash; Enable the compile-less-css service to process less files.
+* compile-less-css.stylesheet &mdash; Primary stylesheet to update if any less file changes.
     If specified, the "dependencies" map will be automatically created.
-* compile-less-css.dependencies -- Explicit map of dependencies if not using "stylesheet".
-* compile-less-css.documents -- Array of less files to compile.
+* compile-less-css.dependencies &mdash; Explicit map of dependencies if not using "stylesheet".
+* compile-less-css.documents &mdash; Array of less files to compile.
 
 ```
 {
