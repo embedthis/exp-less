@@ -15,12 +15,7 @@ Expansive.load({
             let service = expansive.services['compile-less-css']
             if (service.enable) {
                 let control = expansive.control
-                if (expansive.directories.source.join(service.stylesheet + '.less').exists) {
-/* UNUSED
-                    if (control.render.css == null) {
-                        control.render.css = false
-                    }
-*/
+                if (expansive.directories.contents.join(service.stylesheet + '.less').exists) {
                     if (!service.dependencies) {
                         service.dependencies ||= {}
                         service.dependencies[service.stylesheet + '.less'] = '**.less'

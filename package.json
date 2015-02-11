@@ -2,16 +2,22 @@
     "name": "exp-less",
     "description": "Lessc Plugin for Expansive",
     "version": "0.2.0",
-    "pak": ">=0.10",
     "keywords": [
         "expansive-plugin",
         "less"
     ],
     "licenses": "GPL",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/embedthis/exp-less.git"
+    },
     "scripts": {
         "postcache": {
             "script": "Cmd.locate('lessc') || run('npm install -g less')"
         }
     },
-    "install": false
+    "pak": {
+        "install": false,
+        "version": ">=0.10.0"
+    }
 }
