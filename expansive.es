@@ -7,10 +7,9 @@ Expansive.load({
     transforms: [{
         name:   'compile-less-css',
         input:  'less',
-        output: 'css',
+        output: [ 'css', 'less' ],
         stylesheet: 'css/all.css',
         dependencies: null,
-        documents: [ '!**.less', '**.css.less' ],
         script: `
             let service = expansive.services['compile-less-css']
             if (service.enable) {
@@ -22,10 +21,13 @@ Expansive.load({
                     }
                 }
                 blend(control.dependencies, service.dependencies)
-                control.documents += service.documents
             }
 
             function transform(contents, meta, service) {
+                if (!meta.file.glob('**.css.less')) {
+                    vtrace('Info', 'Skip included css file', meta.file)
+                    return null
+                }
                 let less = Cmd.locate('lessc')
                 if (less) {
                     contents = Cmd.run(less + ' - ', {dir: meta.source.dirname}, contents)
