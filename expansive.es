@@ -7,8 +7,7 @@ Expansive.load({
     transforms: [{
         name:   'compile-less-css',
         mappings: {
-            'less': 'css'
-            'less': 'less',
+            less: [ 'css', 'less' ],
         }
         stylesheet: 'css/all.css',
         dependencies: null,
