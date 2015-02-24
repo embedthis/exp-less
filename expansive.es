@@ -6,8 +6,10 @@
 Expansive.load({
     transforms: [{
         name:   'compile-less-css',
-        input:  'less',
-        output: [ 'css', 'less' ],
+        mappings: {
+            'less': 'css'
+            'less': 'less',
+        }
         stylesheet: 'css/all.css',
         dependencies: null,
         script: `
@@ -56,10 +58,9 @@ Expansive.load({
             Abort processing unwanted css files
             Uses configuration from compile-less-css (stylesheet)
          */
-        name:   'clean-css',
-        input:  'css',
-        output: 'css',
-        enable: false,
+        name:     'clean-css',
+        mappings: 'css',
+        enable:   false,
         script: `
             function transform(contents, meta, service) {
                 let lservice = expansive.services['compile-less-css']
