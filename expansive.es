@@ -22,6 +22,9 @@ Expansive.load({
                     }
                 }
                 blend(control.dependencies, service.dependencies)
+                let collections = expansive.control.collections
+                collections.styles ||= []
+                collections.styles.push(service.stylesheet)
             }
 
             function transform(contents, meta, service) {
@@ -54,7 +57,7 @@ Expansive.load({
         `
     }, {
         /*
-            Abort processing unwanted css files
+            Remove unwanted css files
             Uses configuration from compile-less-css (stylesheet)
          */
         name:     'clean-css',
@@ -65,6 +68,7 @@ Expansive.load({
                 let lservice = expansive.services['compile-less-css']
                 if (lservice.stylesheet) {
                     if (lservice.stylesheet != meta.dest) {
+                        trace('Clean', meta.document)
                         contents = null
                     }
                 }
