@@ -9,27 +9,32 @@ Expansive.load({
         mappings: {
             less: [ 'css', 'less' ],
         }
-        stylesheet: 'css/all.css',
+        stylesheets: ['css/all.css'],
         dependencies: null,
         script: `
             let service = expansive.services['compile-less-css']
             if (service.enable) {
                 let control = expansive.control
-                if (expansive.directories.contents.join(service.stylesheet + '.less').exists) {
-                    if (!service.dependencies) {
-                        service.dependencies ||= {}
-                        service.dependencies[service.stylesheet + '.less'] = '**.less'
-                    }
+                if (!(service.stylesheets is Array)) {
+                    service.stylesheets = [service.stylesheets]
                 }
-                blend(control.dependencies, service.dependencies)
-                let collections = expansive.control.collections
-                collections.styles ||= []
-                collections.styles.push(service.stylesheet)
+                for each (stylesheet in service.styleshsets) {
+                    if (expansive.directories.contents.join(stylesheet + '.less').exists) {
+                        if (!service.dependencies) {
+                            service.dependencies ||= {}
+                            service.dependencies[stylesheet + '.less'] = '**.less'
+                        }
+                    }
+                    blend(control.dependencies, service.dependencies)
+                    let collections = expansive.control.collections
+                    collections.styles ||= []
+                    collections.styles.push(stylesheet)
+                }
             }
 
             function transform(contents, meta, service) {
-                if (!meta.file.glob('**.css.less')) {
-                    vtrace('Info', 'Skip included css file', meta.file)
+                if (!meta.source.glob('**.css.less')) {
+                    vtrace('Info', 'Skip included css file', meta.source)
                     return null
                 }
                 let less = Cmd.locate('lessc')
@@ -59,17 +64,20 @@ Expansive.load({
         /*
             Remove unwanted css files
             Uses configuration from compile-less-css (stylesheet)
+            Disabled by default
          */
+        files:    [ '**.css' ],
         name:     'clean-css',
         mappings: 'css',
         enable:   false,
         script: `
             function transform(contents, meta, service) {
                 let lservice = expansive.services['compile-less-css']
-                if (lservice.stylesheet) {
-                    if (lservice.stylesheet != meta.dest) {
-                        trace('Clean', meta.document)
+                for each (stylesheet in lservice.stylesheets) {
+                    if (stylesheet != meta.path && meta.dest.glob(service.files)) {
+                        trace('Clean', meta.dest)
                         contents = null
+                        break
                     }
                 }
                 return contents

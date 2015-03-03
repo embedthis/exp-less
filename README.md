@@ -3,43 +3,60 @@ exp-less
 
 Expansive plugin for Less files.
 
-### To install:
+## Overview
 
-    pak install exp-less
-
-### Description
-
-The exp-less extension compiles Less stylesheets to create composite CSS stylesheet.
-The 'lessc' utility is used to process the Less files.
+The exp-less plugin provides build tooling for stylesheets. It provides the **compile-less-css** service to compile less stylesheets into CSS stylesheets, and the **clean-css** service to remove unwanted intermediate stylesheets.
 
 A map of file dependencies may be defined so that a master Less stylesheet will be rebuilt
 by Expansive whenever an include stylesheet is updated. 
 
-A 'stylesheet' option may specify a single output stylesheet that results from compiling all 
-other Less stylesheets. If specified, the map of dependencies will be automatically created.
+## Installation
 
-A 'documents' option may specify an array of Less files to compile. It may use negated 
-patterns to exclude some files. By convention, exp-less expects the master Less stylesheet 
-to be named with a '.css.less' extension and included Less files to use a simple '.less' 
-extension. The default 'documents' option is set to ['!\*\* .less', '\*\*.css.less'] which will
-process any '\*.css.less' files and exclude the simple '\*.less' files.
+    pak install exp-less
 
-### To configure in expansive.json:
+## Services
 
-* compile-less-css.enable &mdash; Enable the compile-less-css service to process less files.
-* compile-less-css.stylesheet &mdash; Primary stylesheet to update if any less file changes.
+Provides the following services:
+
+* compile-less-css
+* clean-css
+
+## compile-less-css
+
+The compile-less-css service processes LESS stylesheets using the **lessc** utility into CSS stylesheets.
+
+By convention, exp-less expects master Less stylesheets to be named with a '.css.less' extension and included Less 
+files to use a simple '.less' extension. 
+
+### Configuration
+
+* enable &mdash; Enable the compile-less-css service to process less files.
+* stylesheets &mdash; Stylesheets to update if any less file changes.
     If specified, the "dependencies" map will be automatically created.
-* compile-less-css.dependencies &mdash; Explicit map of dependencies if not using "stylesheet".
-* compile-less-css.documents &mdash; Array of less files to compile.
+* dependencies &mdash; Explicit map of dependencies if not using "stylesheet". They property name is the master LESS
+    stylesheet and the value contains the ingredient less stylesheets that are included by the master. 
+
+## clean-css
+
+The clean-css service may be used to remove unwanted CSS files from the **dist** directory. By default, the clean-css service is disabled. 
+
+### Configuration
+
+* enable &mdash; Enable the compile-less-css service to process less files. Defaults to false.
+* files &mdash; Array of glob file patterns for CSS files to remove.
 
 ```
 {
     services: {
         'compile-less-css': {
             enable: true,
-            stylesheet: 'css/all.css',
-            dependencies: { 'css/all.css.less' : '**.less' },
-            documents: [ '!**.less', '**.css.less' ]
+            stylesheets: [ 'css/all.css' ],
+            dependencies: { 
+                'css/all.css.less' : '**.less' 
+            },
+        },
+        'clean-css': {
+            files: [ 'css/unwanted.css', '!**important.css] ]
         }
     }
 }
