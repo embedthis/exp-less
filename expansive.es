@@ -18,7 +18,7 @@ Expansive.load({
                 if (!(service.stylesheets is Array)) {
                     service.stylesheets = [service.stylesheets]
                 }
-                for each (stylesheet in service.styleshsets) {
+                for each (stylesheet in service.stylesheets) {
                     if (expansive.directories.contents.join(stylesheet + '.less').exists) {
                         if (!service.dependencies) {
                             service.dependencies ||= {}
