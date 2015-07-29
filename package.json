@@ -1,7 +1,7 @@
 {
     "name": "exp-less",
     "description": "Lessc Plugin for Expansive",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "keywords": [
         "expansive-plugin",
         "less"
@@ -13,7 +13,7 @@
     },
     "scripts": {
         "postcache": {
-            "script": "Cmd.locate('lessc') || run('npm install -g less')"
+            "script": "if (!Cmd.locate('lessc')) { if (!Cmd.locate('npm')) { throw 'Cannot locate the \"npm\" utility.' } else { run('npm install -g less')}}"
         }
     },
     "pak": {
