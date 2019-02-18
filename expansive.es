@@ -45,7 +45,7 @@ Expansive.load({
                 if (less) {
                     contents = Cmd.run(less + ' - ', {dir: meta.source.dirname}, contents)
                 } else {
-                    trace('Warn', 'Cannot find lessc')
+                    throw new Error('Cannot find lessc')
                 }
                 return contents
             }
