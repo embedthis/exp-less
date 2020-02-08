@@ -43,6 +43,8 @@ Expansive.load({
             render: function(contents, meta) {
                 let less = Cmd.locate('lessc')
                 if (less) {
+                    run('npm install -g lessc')
+                    less = Cmd.locate('lessc')
                     contents = Cmd.run(less + ' - ', {dir: meta.source.dirname}, contents)
                 } else {
                     throw new Error('Cannot find lessc')
